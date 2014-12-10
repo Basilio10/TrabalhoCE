@@ -12,17 +12,19 @@ class Documento:
     file_path = ""
     Arquivo = None
     Texto = ""
-    Palavras = array
-    Frequencia = dict()
+    Palavras = None
+    Frequencias = None
 
 
     def __init__(self, f):
 
         self.file_path = f
+        self.Palavras = []
+        self.Frequencias = dict()
 
     def abrir(self, mode):
         try:
-            self.Arquivo = open(self.file_path)
+            self.Arquivo = open(self.file_path, "r")
             return True
         except:
             print ("Ocorreu um erro ao tentar abrir o arquivo!")
@@ -37,7 +39,6 @@ class Documento:
 
 
     def ler(self):
-        self.Arquivo = open(self.file_path, "r")
         if self.Arquivo:
             self.Texto = self.Arquivo.read()
             self.fechar()
@@ -60,18 +61,8 @@ class Documento:
 
         for word in self.Palavras:
             if word:
-                if word in self.Frequencia:
-                    value = self.Frequencia.get(word)
-                    self.Frequencia[word] = value+1
+                if word in self.Frequencias:
+                    value = self.Frequencias.get(word)
+                    self.Frequencias[word] = value+1
                 else:
-                    self.Frequencia[word] = 1
-
-
-f = Documento("../Articles/teste.txt")
-f.ler()
-f.separaPalavras()
-f.calculaFrequencia()
-
-
-
-
+                    self.Frequencias[word] = 1

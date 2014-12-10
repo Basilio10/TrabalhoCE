@@ -1,12 +1,15 @@
-
+from Model import Documento
 __author__ = 'Vinícius e Antonio'
 
-from Documento import Documento
+
 
 class IndiceGlobal:
-    Documentos = []
-    Distancias = [[]]
+    Documentos = None
+    Distancias = None
 
+    def __init__(self):
+        self.Documentos = []
+        self.Distancias = [[]]
 
     #Monta o índice global
     #Deve receber como parâmetro uma lista de documentos
@@ -19,13 +22,16 @@ class IndiceGlobal:
     def calculaDistancias(self):
         qtdDocumentos = len(self.Documentos)
         i = 0
-        j = 0
 
-        self.criaMatriz(qtdDocumentos)
+        self._criaMatriz(qtdDocumentos)
 
-        while i < qtdDocumentos:
+        while i < qtdDocumentos - 1:
+            j = 1
             while j < qtdDocumentos:
-                self.calculaDistancias(i,j)
+                self._calculaDistancias(i,j)
+                j += 1
+
+            i += 1
 
     def _calculaDistancias(self, a, b):
         freqA = self.Documentos[a].Frequencias
@@ -45,11 +51,15 @@ class IndiceGlobal:
                 distancia += pow(freqA[palavra], 2)
 
         for palavra in palavrasDocB:
-            if not (palavra in palavrasDocB):
+            if not (palavra in freqA):
                 distancia += pow(freqB[palavra], 2)
 
-    def criaMatriz(self, tam):
+        self.Distancias[a][b] = distancia
+        self.Distancias[b][a] = distancia
+
+    def _criaMatriz(self, tam):
         self.Distancias = [[0 for x in range(tam)] for x in range(tam)]
+
 
 
 
