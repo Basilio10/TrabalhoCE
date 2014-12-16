@@ -64,8 +64,9 @@ class IndiceGlobal:
         self.distancias = [[0 for x in range(tam)] for x in range(tam)]
 
     def manager(self):
-        self.calculaDistancias()
         self._criaMatriz(self.qtdDocumentos)
+        self.calculaDistancias()
+
 
 
 
