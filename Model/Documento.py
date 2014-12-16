@@ -1,30 +1,30 @@
-#from numpy.core.tests.test_multiarray import x
+# from numpy.core.tests.test_multiarray import x
 
 __author__ = 'Antonio Basilio'
 # coding: utf-8
 from array import array
 
-class Documento:
-    '''
-    Classe modelo para a manipulação de arquivos .txt
-    '''
 
+class Documento:
+    """
+    Classe modelo para a manipulacao de arquivos .txt
+    """
     file_path = ""
-    Arquivo = None
-    Texto = ""
-    Palavras = None
-    Frequencias = None
+    arquivo = None
+    texto = ""
+    palavras = None
+    frequencias = None
 
 
     def __init__(self, f):
-
         self.file_path = f
-        self.Palavras = []
-        self.Frequencias = dict()
+        self.palavras = array
+        self.frequencias = dict()
+        self.manager()
 
     def abrir(self, mode):
         try:
-            self.Arquivo = open(self.file_path, "r")
+            self.arquivo = open(self.file_path, mode)
             return True
         except:
             print ("Ocorreu um erro ao tentar abrir o arquivo!")
@@ -33,14 +33,16 @@ class Documento:
 
     def fechar(self):
         try:
-            self.Arquivo.close()
+            self.arquivo.close()
         except:
-            print ("Não foi possível fechar o arquivo! Verifique se o seu sistema está impossibilitando este procedimento.")
+            print (
+                "Nao foi possivel fechar o arquivo! Verifique se o seu sistema esta impossibilitando este procedimento.")
 
 
     def ler(self):
-        if self.Arquivo:
-            self.Texto = self.Arquivo.read()
+        self.arquivo = open(self.file_path, "r")
+        if self.arquivo:
+            self.texto = self.arquivo.read()
             self.fechar()
             return True
         self.fechar()
@@ -49,20 +51,40 @@ class Documento:
 
     def separaPalavras(self):
 
-        #Método responsável por separar as palavras do texto, retornando uma lista de palavras soltas
+        #Metodo responsavel por separar as palavras do texto, retornando uma lista de palavras soltas
 
-        self.Palavras = self.Texto.split(" ")
+        self.palavras = self.texto.split(" ")
 
     def calculaFrequencia(self):
 
-        #Método responsável por atribuir frequência para as palavras do texto.
+        #Metodo responsavel por atribuir frequencia para as palavras do texto.
         #:return: dict
 
 
-        for word in self.Palavras:
-            if word:
-                if word in self.Frequencias:
-                    value = self.Frequencias.get(word)
-                    self.Frequencias[word] = value+1
+        for palavra in self.palavras:
+            if palavra:
+                if palavra in self.frequencias:
+                    value = self.frequencias.get(palavra)
+                    self.frequencias[palavra] = value + 1
                 else:
-                    self.Frequencias[word] = 1
+                    self.frequencias[palavra] = 1
+
+    def getPalavras(self):
+        return self.palavras
+
+    def getChaves(self):
+        return self.frequencias.keys()
+
+    def getValores(self):
+        return self.frequencias.values()
+
+    def getItens(self):
+        return self.frequencias.items()
+
+    def manager(self):
+        self.ler()
+        self.separaPalavras()
+        self.calculaFrequencia()
+
+#f = Documento("../data/01/texto1.txt")
+#print f.getItens()
