@@ -1,6 +1,6 @@
 from Documento import Documento
 
-__author__ = 'Antonio Basilio'
+__author__ = 'Antonio Basilio e Vinicius'
 
 from array import array
 
@@ -26,6 +26,9 @@ class Base:
         self.manager()
 
     def lerArquivo(self, path):
+        """
+        Metodo responsavel por ler um arquivo
+        """
         texto = array
         textoFinal = array
         try:
@@ -38,21 +41,33 @@ class Base:
             print ("Ocorreu um erro ao tentar ler o arquivo!")
             return False
 
-    #le o arquivo que contem os arquivos que deverao ser lidos
+
     def listaTest(self):
+        """
+        le o arquivo que contem os arquivos test que deverao ser lidos
+        """
         self.arquivosTest = self.lerArquivo(self.pathArquivosTest)
 
     def listaTrain(self):
+        """
+        le o arquivo que contem os arquivos train que deverao ser lidos
+        """
         self.arquivosTrain = self.lerArquivo(self.pathArquivosTrain)
 
-    #cria uma lista com os documentos
+
     def montaTest(self):
+        """
+        #Monta uma lista com os documentos test
+        """
         for path in self.arquivosTest:
             caminho = path.split(" ")
             D = Documento("../" + caminho[0])
             self.test.append(D)
 
     def montaTrain(self):
+        """
+        #Monta uma lista com os documentos train
+        """
         for path in self.arquivosTrain:
             caminho = path.split(" ")
             D = Documento("../" + caminho[0])
@@ -60,6 +75,9 @@ class Base:
             self.train.append(D)
 
     def manager(self):
+        """
+        Manager da classe
+        """
         self.listaTest()
         self.listaTrain()
         self.montaTest()
@@ -71,10 +89,5 @@ class Base:
 
     def getTrain(self):
         return self.train
-
-
-#B = Base("../data/01-test.txt", "../data/01-train.txt")
-#print B.getTest()
-#print B.getTrain()
 
 

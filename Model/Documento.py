@@ -1,13 +1,13 @@
 # from numpy.core.tests.test_multiarray import x
 
-__author__ = 'Antonio Basilio'
+__author__ = 'Antonio Basilio e Vinicius'
 # coding: utf-8
 from array import array
 
 
 class Documento:
     """
-    Classe modelo para a manipulacao de arquivos .txt
+    Classe modelo para o documento
     """
     file_path = ""
     arquivo = None
@@ -25,6 +25,9 @@ class Documento:
 
 
     def abrir(self, mode):
+        """
+        Metodo responsavel por abrir o arquivo
+        """
         try:
             self.arquivo = open(self.file_path, mode)
             return True
@@ -34,6 +37,9 @@ class Documento:
 
 
     def fechar(self):
+        """
+        Metodo responsavel por fechar o arquivo
+        """
         try:
             self.arquivo.close()
         except:
@@ -42,6 +48,9 @@ class Documento:
 
 
     def ler(self):
+        """
+        Metodo responsavel por ler o arquivo
+        """
         self.arquivo = open(self.file_path, "r")
         if self.arquivo:
             self.texto = self.arquivo.read()
@@ -56,14 +65,16 @@ class Documento:
 
 
     def separaPalavras(self):
-
-        #Metodo responsavel por separar as palavras do texto, retornando uma lista de palavras soltas
-
+        """
+        Metodo responsavel por separar as palavras do texto, retornando uma lista de palavras soltas
+        """
         self.palavras = self.texto.split(" ")
 
     def calculaFrequencia(self):
-        #Metodo responsavel por atribuir frequencia para as palavras do texto.
-        #:return: dict
+        """
+        Metodo responsavel por atribuir frequencia para as palavras do texto.
+        :return: dict
+        """
         for palavra in self.palavras:
             if palavra:
                 if palavra in self.indice:
@@ -85,9 +96,9 @@ class Documento:
         return self.indice.items()
 
     def manager(self):
+        """
+        manager da classe
+        """
         self.ler()
         self.separaPalavras()
         self.calculaFrequencia()
-
-#f = Documento("../data/01/texto1.txt")
-#print f.getItens()

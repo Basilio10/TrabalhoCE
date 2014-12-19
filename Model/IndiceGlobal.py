@@ -1,127 +1,100 @@
 from Documento import Documento
-__author__ = 'Vinicius e Antonio'
+from Base import Base
+import random
+__author__ = 'Vinicius e Antonio Basilio'
 
 
 
 class IndiceGlobal:
-    documentos = None
-    distancias = None
-    qtdDocumentos = None
-    palavrasGlobal = None
-    #qtdPalavras = None
-    indice = None
-    qtdtest = None
-    test = None
-    train = None
+    lista_train = None
+    lista_test = None
+    lista_distancias = None
+    lista_relacao = None
 
-    def __init__(self, docs, train):
-        self.test = docs
-        self.train = train
-        self.documentos = self.test + self.train
-        self.distancias = [[]]
-        self.qtdDocumentos = 0
-        #self.qtdPalavras = 0
-        self.indice = []
-        self.qtdtest = len(docs)
-        self.manager()
+    def __init__(self, lista_test, lista_train):
+        self.lista_test = lista_test
+        self.lista_train = lista_train
+        self.lista_distancias = []
+        self.lista_relacao = []
 
-    #Monta o indice global
-    #Deve receber como parametro uma lista de documentos
-    #def montaIndice(self, documentos):
-
-        #Verifica se o parametro eh uma lista
-     #   if isinstance(documentos, list):
-      #      self.documentos = documentos
-
-    #def calculaNumeroPalavras(self):
-     #   for d in self.documentos:
-            
-
-    def calculaDistancias(self):
-        self.qtdDocumentos = len(self.documentos)
-        i = 0
-
-        self._criaMatriz(self.qtdDocumentos)
-
-        while i < self.qtdDocumentos - 1:
-            j = 1
-            while j < self.qtdDocumentos:
-                self._calculaDistancias(i,j)
-                j += 1
-
-            i += 1
-
-    def _calculaDistancias(self, a, b):
-        freqA = self.documentos[a].indice
-        freqB = self.documentos[b].indice
-
-        palavrasDocA = self.documentos[a].palavras
-        palavrasDocB = self.documentos[b].palavras
-
-        distancia = 0
-
-        for palavra in palavrasDocA:
-
-            if palavra in freqB:
-                distancia += pow(freqA[palavra] - freqB[palavra], 2)
-
+    def calculaIndice(self, docA, docB):
+        """
+        Metodo responsavel por calcular a frequencia entre dois documentos
+        :param docA: documento test
+        :param docB: documento train
+        :return: d: int
+        """
+        d = 0
+        for palavra in docA.indice:
+            if palavra in docB.indice:
+                d += (docA.indice[palavra] - docB.indice[palavra]) ** 2
             else:
-                distancia += pow(freqA[palavra], 2)
+                d += docA.indice[palavra]**2
 
-        for palavra in palavrasDocB:
-            if not (palavra in freqA):
-                distancia += pow(freqB[palavra], 2)
+        for palavra in docB.indice:
+            if not palavra in docA.indice:
+                d += docB.indice[palavra]**2
+        return d
 
-        self.distancias[a][b] = distancia
-        self.distancias[b][a] = distancia
+    def calculaIndices(self):
+        """
+        Metodo responsavel por calcular todas as frequencias entre todos os documentos
+        :return:
+        """
+        lista_d = []
+        for docA in self.lista_test:
+            for docB in self.lista_train:
+                lista_d.append(self.calculaIndice(docA, docB))
+            novaLista = lista_d[:]
+            lista_d = []
+            self.lista_distancias.append(novaLista)
+        #print self.lista_distancias
 
-    def _criaMatriz(self, tam):
-        self.distancias = [[0 for x in range(tam)] for x in range(tam)]
 
-
-    #Metodo que gera a saida
-    def indiceDocumentos(self):
+    def imprimeRecomendacao(self):
+        """
+        Metodo responsavel por imprimir na tela o resultado do programa
+        :return:
+        """
+        menor = []
         i = 0
-        for doc in self.test:
-            qt = 0
-            arquivo = str(doc.file_path)
-            distancia = self.distancias[i]
-            for dis in distancia:
-                if qt < self.qtdtest:
-                    distancia.pop(qt)
-                    qt += 1
-
-            dist_original = distancia[:]
-            #remover os de test da lista
-            distancia.sort()
-            #print distancia
+        for valor in self.lista_distancias:
             menor = []
-
-            for j in distancia:
-                if j != 0:
+            distancia_temp = valor[:]
+            distancia_temp.sort()
+            for v in distancia_temp:
+                if v != 0:
                     if len(menor) < 2:
-                        menor.append(dist_original.index(j))
+                        menor.append(valor.index(v))
 
-            #escreve a classe no arquivo
-            print "\n##############################"
-            doc.setClasse(self.train[menor[0]].classe)
-            print doc.file_path + " -> " + doc.classe
+            self.lista_test[i].setClasse(self.lista_train[menor[0]].classe)
+            print "##############################"
+            print self.lista_test[i].file_path + " -> " + self.lista_test[i].classe.rstrip()
             print "------------------------------"
             print "TEXTOS MAIS PARECIDOS"
             print "------------------------------"
-            lista = [self.train[menor[0]].file_path, dist_original[menor[0]], doc.classe.rstrip()]
-            print lista
-            self.indice.append(lista)
-            lista = [self.train[menor[1]].file_path, dist_original[menor[1]], doc.classe.rstrip()]
-            print lista
-            self.indice.append(lista)
+            for m in menor:
+                print self.lista_train[m].file_path + " " + str(self.lista_distancias[i][m])
+
+            print "------------------------------"
+            print "TEXTOS ALEATORIOS DA MESMA CLASSE"
+            print "------------------------------"
+            ale = 0
+            while ale < 2:
+                numero = random.randrange(0, len(self.lista_train)-1);
+                if self.lista_train[numero].classe == self.lista_train[i].classe:
+                    print self.lista_train[numero].file_path + " " + str(self.lista_distancias[i][numero])
+                    ale += 1
+            print "\n"
+
             i += 1
 
 
-    def manager(self):
-        self.calculaDistancias()
-        #print self.distancias
-        self.indiceDocumentos()
+
+
+
+
+
 
 
 
