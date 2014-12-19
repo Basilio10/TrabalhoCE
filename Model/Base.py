@@ -56,6 +56,7 @@ class Base:
         for path in self.arquivosTrain:
             caminho = path.split(" ")
             D = Documento("../" + caminho[0])
+            D.setClasse(caminho[1])
             self.train.append(D)
 
     def manager(self):

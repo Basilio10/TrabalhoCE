@@ -13,14 +13,16 @@ class Documento:
     arquivo = None
     texto = ""
     palavras = None
-    frequencias = None
+    indice = None
+    classe = ""
 
 
     def __init__(self, f):
         self.file_path = f
         self.palavras = array
-        self.frequencias = dict()
+        self.indice = dict()
         self.manager()
+
 
     def abrir(self, mode):
         try:
@@ -49,6 +51,10 @@ class Documento:
         return False
 
 
+    def setClasse(self, classe):
+        self.classe = classe
+
+
     def separaPalavras(self):
 
         #Metodo responsavel por separar as palavras do texto, retornando uma lista de palavras soltas
@@ -56,30 +62,27 @@ class Documento:
         self.palavras = self.texto.split(" ")
 
     def calculaFrequencia(self):
-
         #Metodo responsavel por atribuir frequencia para as palavras do texto.
         #:return: dict
-
-
         for palavra in self.palavras:
             if palavra:
-                if palavra in self.frequencias:
-                    value = self.frequencias.get(palavra)
-                    self.frequencias[palavra] = value + 1
+                if palavra in self.indice:
+                    value = self.indice.get(palavra)
+                    self.indice[palavra] = value + 1
                 else:
-                    self.frequencias[palavra] = 1
+                    self.indice[palavra] = 1
 
     def getPalavras(self):
         return self.palavras
 
     def getChaves(self):
-        return self.frequencias.keys()
+        return self.indice.keys()
 
     def getValores(self):
-        return self.frequencias.values()
+        return self.indice.values()
 
     def getItens(self):
-        return self.frequencias.items()
+        return self.indice.items()
 
     def manager(self):
         self.ler()
